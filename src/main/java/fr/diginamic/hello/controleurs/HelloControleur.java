@@ -12,8 +12,10 @@ import fr.diginamic.hello.service.HelloService;
 @RestController
 @RequestMapping("/hello")
 public class HelloControleur {
-	 @Autowired
+	@Autowired
     private  HelloService helloService;
+	 
+	 
     
 
    
