@@ -5,16 +5,17 @@ public class Ville {
 	private int id;
 
 	private String nom;
-	private int nbHabitants;
+	private long nbHabitants;
 	
 	
 	/**
 	 * @param nbHabitants
 	 * @param nom
+	 * @param id 
 	 */
-	public Ville(int id ,String nom, int nbHabitants) {
+	public Ville(int id ,String nom, long nbHabitants) {
 		super();
-		this.id=id;
+		this.id= id;
 		this.nom = nom;
 		this.nbHabitants = nbHabitants;
 	}
@@ -27,7 +28,7 @@ public class Ville {
 	/**
 	 * @return the nbHabitants
 	 */
-	public int getNbHabitants() {
+	public long getNbHabitants() {
 		return nbHabitants;
 	}
 	/**
@@ -39,7 +40,7 @@ public class Ville {
 	/**
 	 * @param nbHabitants the nbHabitants to set
 	 */
-	public void setNbHabitants(int nbHabitants) {
+	public void setNbHabitants(long nbHabitants) {
 		this.nbHabitants = nbHabitants;
 	}
 	/**
