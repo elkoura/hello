@@ -1,6 +1,12 @@
 package fr.diginamic.hello.service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+
+import fr.diginamic.hello.dao.DepartementDAO;
+import fr.diginamic.hello.entities.Departement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +28,7 @@ public class VilleService {
 	}
 
 	/**Ressort une ville
-	 * @param id l'ID de la ville à trouver
+	 * @param idVille Ville l'ID de la ville à trouver
 	 */
 	public Ville extractVille(int idVille) {
 		return villeDAO.extractVille(idVille);
@@ -47,5 +53,36 @@ public class VilleService {
 		villeDAO.deleteVille(idVille);
 		return extractVilles();
 	}
-	
+
+	public void importVillesFromCsv(String csvFilePath) {
+		String line = "";
+		String csvSplitBy = ",";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+			while ((line = br.readLine()) != null) {
+				String[] villeData = line.split(csvSplitBy);
+
+				if (villeData.length >= 4) {
+					String codeDepartement = villeData[0];
+					String nomDepartement = villeData[1];
+					String nomVille = villeData[2];
+					int population = Integer.parseInt(villeData[3]);
+
+					DepartementDAO departementDAO = new DepartementDAO();
+					Departement departement = departementDAO.findByName(nomDepartement);
+					if (departement == null) {
+						departement = new Departement(nomDepartement);
+						departementDAO.insertDepartement(departement);
+					}
+
+					Ville ville = new Ville(nomVille, population);
+					ville.setDepartement(departement);
+
+					villeDAO.insertVille(ville);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

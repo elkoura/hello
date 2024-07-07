@@ -23,6 +23,7 @@ public class DepartementContoleur{
 	 * 
 	 */
 	public List<Departement> extractDepartements() {
+
 		return depDAO.extractDepartements();
 	}
 
@@ -30,14 +31,15 @@ public class DepartementContoleur{
 	 * @param id L'ID du département à trouver
 	 */
 	public Departement extractDepartement(int id) {
+
 		return depDAO.extractDepartement(id);
 	}
 	
 	/**Insere un département dans la base de donnée
-	 * @param departement Le département à inserer
+	 * @param newDepartement Le département à inserer
 	 */
-	public void insertDepartement(@Valid Departement nvDepartement) {
-		depDAO.insertDepartement(nvDepartement);
+	public void insertDepartement(@Valid Departement newDepartement) {
+		depDAO.insertDepartement(newDepartement);
 
 	}
 
@@ -46,38 +48,9 @@ public class DepartementContoleur{
 	 * @param departement Les nouvelles données
 	 */
 	public void updateDepartement(int id, @Valid Departement departement) {
+
 		depDAO.updateDepartement(id, departement);
 	}
 
-	/**Supprime un département donné
-	 * @param id L'id du département à supprimer
-	 */
-	public ResponseEntity<String> deleteDepartement(int id) {
-		Departement departement = extractDepartement(id);
-		if (departement != null) {
-			depDAO.deleteDepartement(id);
-			return ResponseEntity.ok("Departement supprimé");
-		}
-		return ResponseEntity.badRequest().body("Ce departement n'existe pas");
-	}
 
-	/**Ressort les nb villes les plus peuplées d'un département
-	 * @param id L'id du département en question
-	 * @param nb Le nombre maximum de villes à sortir
-	 */
-	public List<Ville> topVillesByNbHabitants(int id, int nb) {
-		return depDAO.topVillesByNbHabitants(id, nb);
-	}
-
-	/**Ressort toutes les villes d'un département dont le nombre d'habitants est compris entre min et max
-	 * @param id L'id du département en question
-	 * @param min le nombre minimum d'habitants
-	 * @param max le nombre maximum d'habitants
-	 */
-	public List<Ville> extractVillesbetweenMinMaxNbHabitants(int id, int min, int max) {
-		if (min<max) {
-			return depDAO.extractVillesbetweenMinMaxNbHabitants(id,min, max);
-		}
-		return null;
-	}
 }

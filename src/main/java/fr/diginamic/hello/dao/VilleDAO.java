@@ -29,12 +29,12 @@ public class VilleDAO {
 	}
 
 	/**Ressort une ville
-	 * @param id l'ID de la ville à trouver
+	 * @param idVille Ville l'ID de la ville à trouver
 	 */
 	public Ville extractVille(int idVille) {
 		TypedQuery<Ville> query= em.createQuery("SELECT v FROM Ville v WHERE v.id=:id", Ville.class);		
 		query.setParameter("id", idVille);
-		List<Ville>villes =query.getResultList();
+		List<Ville> villes =query.getResultList();
 		if(villes.size()>0) {
 			return villes.get(0);
 		}
@@ -78,7 +78,7 @@ public class VilleDAO {
 	}
 	
 	/**Supprime une ville donnée
-	 * @param id L'id de la ville à supprimer
+	 * @param idVille Ville L'id de la ville à supprimer
 	 */
 	public void deleteVille(int idVille) {
 		em.remove(extractVille(idVille));

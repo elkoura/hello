@@ -75,7 +75,7 @@ public class DepartementService {
 	 * @param min le nombre minimum d'habitants
 	 * @param max le nombre maximum d'habitants
 	 */
-	public List<Ville> extractVillesMinMaxNbHabitants(int id, int min, int max) {
+	public List<Ville> extractVillesbetweenMinMaxNbHabitants(int id, int min, int max) {
 		if (min<max) {
 			return depDAO.extractVillesbetweenMinMaxNbHabitants(id,min, max);
 		}

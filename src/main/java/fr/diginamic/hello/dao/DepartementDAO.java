@@ -110,4 +110,10 @@ public class DepartementDAO {
 		return query.getResultList();
 	}
 
+	public Departement findByName(String nom) {
+		TypedQuery<Departement> query  = em.createQuery("SELECT n FROM Departement n WHERE n.name=:nom", Departement.class);
+		return (Departement) query.getResultList();
+
+
+	}
 }

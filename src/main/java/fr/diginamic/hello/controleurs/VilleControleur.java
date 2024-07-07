@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/villes")
-public class VilleControleur {
+public class 	VilleControleur {
 	
 	@Autowired
 	private VilleService service;
