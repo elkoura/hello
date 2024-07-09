@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import fr.diginamic.hello.service.VilleService;
 
 import org.springframework.boot.WebApplicationType;
-
+@SpringBootApplication
 public class TraitementFichiersApplication implements CommandLineRunner {
 
     @Autowired
@@ -22,6 +22,6 @@ public class TraitementFichiersApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        villeService.importVillesFromCsv("‪C:\\Users\\fouad\\OneDrive\\Bureau\\departements-france.csv");
+        villeService.importVillesFromCsv("C:\\Users\\fouad\\OneDrive\\Bureau\\recensement.csv");
     }
 }

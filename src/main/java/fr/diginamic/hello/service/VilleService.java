@@ -1,88 +1,67 @@
 package fr.diginamic.hello.service;
 
+import fr.diginamic.hello.entities.Departement;
+import fr.diginamic.hello.entities.Ville;
+import fr.diginamic.hello.repository.DepartementRepository;
+import fr.diginamic.hello.repository.VilleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import fr.diginamic.hello.dao.DepartementDAO;
-import fr.diginamic.hello.entities.Departement;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import fr.diginamic.hello.dao.VilleDAO;
-import fr.diginamic.hello.entities.Ville;
-
-/**Classe de service pour les méthodes liées à la classe Ville
- * 
- */
 @Service
 public class VilleService {
+
 	@Autowired
-	private VilleDAO villeDAO;
+	private VilleRepository villeRepository;
 
-	
-	public List<Ville> extractVilles() {
-		return villeDAO.extractVilles();
-	}
+	@Autowired
+	private DepartementRepository departementRepository;
 
-	/**Ressort une ville
-	 * @param idVille Ville l'ID de la ville à trouver
-	 */
-	public Ville extractVille(int idVille) {
-		return villeDAO.extractVille(idVille);
-	}
-
-	/**Insere une ville dans la base de donnée
-	 * @param ville La ville à inserer
-	 */
-	public List<Ville> insertVille(Ville ville) {
-		villeDAO.insertVille(ville);
-		return extractVilles();
-	}
-	
-	
-	public List<Ville> updateVille(int id, Ville ville) {
-		villeDAO.updateVille(id, ville);
-		return extractVilles();
-	}
-	
-	
-	public List<Ville> deleteVille(int idVille) {
-		villeDAO.deleteVille(idVille);
-		return extractVilles();
-	}
-
-	public void importVillesFromCsv(String csvFilePath) {
-		String line = "";
-		String csvSplitBy = ",";
-
-		try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+	@Transactional
+	public void importVillesFromCsv(String filePath) {
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			String line;
 			while ((line = br.readLine()) != null) {
-				String[] villeData = line.split(csvSplitBy);
+				String[] fields = line.split(";");
+				if (fields.length >= 9 && !fields[0].equals("Code région")) {
+					String nomDepartement = fields[1];
+					int codeDepartement = Integer.parseInt(fields[2]);
+					String nomVille = fields[6];
+					int population = Integer.parseInt(fields[7].replaceAll(" ", ""));
 
-				if (villeData.length >= 4) {
-					String codeDepartement = villeData[0];
-					String nomDepartement = villeData[1];
-					String nomVille = villeData[2];
-					int population = Integer.parseInt(villeData[3]);
-
-					DepartementDAO departementDAO = new DepartementDAO();
-					Departement departement = departementDAO.findByName(nomDepartement);
+					Departement departement = departementRepository.findByCode(codeDepartement);
 					if (departement == null) {
-						departement = new Departement(nomDepartement);
-						departementDAO.insertDepartement(departement);
+						departement = new Departement();
+						departement.setCode(codeDepartement);
+						departement.setNom(nomDepartement);
+						departementRepository.save(departement);
 					}
 
-					Ville ville = new Ville(nomVille, population);
+					Ville ville = new Ville();
+					ville.setNom(nomVille);
+					ville.setNbHabitants(population);
 					ville.setDepartement(departement);
-
-					villeDAO.insertVille(ville);
+					villeRepository.save(ville);
 				}
 			}
 		} catch (IOException e) {
+			// Gestion des exceptions liées à la lecture du fichier CSV
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			// Gestion des exceptions de conversion de nombre
 			e.printStackTrace();
 		}
 	}
+
+	@Transactional(readOnly = true)
+	public List<Ville> findTopNVillesByDepartementCode(int departementCode, int n) {
+		return villeRepository.findTopNByDepartementCodeOrderByNbHabitantsDesc(departementCode, PageRequest.of(0, n)).getContent();
+	}
 }
+

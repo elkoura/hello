@@ -35,10 +35,10 @@ public class DepartementService {
 	}
 	
 	/**Insere un département dans la base de donnée
-	 * @param departement Le département à inserer
+	 * @param newDepartement Le département à inserer
 	 */
-	public void insertDepartement(@Valid Departement novDepartement) {
-		depDAO.insertDepartement(novDepartement);
+	public void insertDepartement(@Valid Departement newDepartement) {
+		depDAO.insertDepartement(newDepartement);
 
 	}
 

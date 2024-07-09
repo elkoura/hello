@@ -20,7 +20,7 @@ public class Ville {
     /** Identifiant unique de la ville, généré automatiquement */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    protected Long id;
 
     /** Nom de la ville, ne peut pas être null et doit avoir au moins 2 caractères */
     @NotNull
@@ -93,7 +93,7 @@ public class Ville {
      * 
      * @return l'identifiant de la ville
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -102,7 +102,7 @@ public class Ville {
      * 
      * @param id Identifiant de la ville
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
